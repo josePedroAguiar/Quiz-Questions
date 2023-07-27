@@ -1,0 +1,23 @@
+CREATE TABLE tblQuestion (
+    id SERIAL PRIMARY KEY,
+    question TEXT,
+    description TEXT,
+    answer_a TEXT,
+    answer_b TEXT,
+    answer_c TEXT,
+    answer_d TEXT,
+    answer_e TEXT,
+    answer_f TEXT,
+    multiple_correct_answers BOOLEAN,
+    answer_a_correct BOOLEAN,
+    answer_b_correct BOOLEAN,
+    answer_c_correct BOOLEAN,
+    answer_d_correct BOOLEAN,
+    answer_e_correct BOOLEAN,
+    answer_f_correct BOOLEAN,
+    correct_answer TEXT,
+    explanation TEXT,
+    tip TEXT,
+    category TEXT,
+    difficulty TEXT
+);
