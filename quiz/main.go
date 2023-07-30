@@ -547,7 +547,7 @@ func main(){
 	router.GET("/quizcreated",verifyToken,getQuizCreated)
 	router.POST("/assign-quiz",verifyToken,assignQuizToUsers)
 	//router.GET("/quizcreated",verifyToken,)
-    router.GET("/createquiz",verifyToken,getQuiz)
+    //router.GET("/createquiz",verifyToken,getQuiz)
 	router.POST("/savequiz",verifyToken,saveQuiz)
 	router.Run("localhost:8000")
 	//db:=connect()
