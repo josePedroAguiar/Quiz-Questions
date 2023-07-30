@@ -306,6 +306,113 @@ func getQuestionsBy(c *gin.Context) {
 }
 
 
+func getQuiz(c *gin.Context) {
+	// Access query parameters using c.Query()
+	difficulty := c.Query("difficulty")
+	categorys := c.Query("categorys")
+	numberStr := c.DefaultQuery("number", "all") // Default to 0 if the "number" query parameter is not provided
+	var number int
+	var err error
+	// Convert numberStr to an integer
+	if numberStr!="all"{
+		number, err = strconv.Atoi(numberStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid number parameter"})
+		return
+	}
+	
+		if number <= 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Number should be bigger than 0"})
+			return
+		}
+	}else{
+		number=3
+	}
+
+
+
+	cats:=getTagsFromString(categorys,",")
+	db := connect()
+
+	var questions []Question
+	for _,category := range cats {
+		// Set the query parameters
+		if difficulty == "" && category.Name == "" {
+			arr := getAll(db)
+			if(arr==nil){
+				c.JSON(http.StatusOK, gin.H{"message": "Not found any questions"})
+				continue
+			}
+			if number != 0  && len(arr)>number{
+				resp := getRandomElements(arr, number)
+				questions = append(questions, resp...)
+				continue
+			} else {
+				questions = append(questions, arr...)
+				continue
+			}
+		} else if difficulty == "" {
+			arr := getByCategory(db, category.Name)
+			if(arr==nil){
+				c.JSON(http.StatusOK, gin.H{"message": "Not found any questions"})
+				continue
+			}
+			if number != 0  && len(arr)>number{
+				resp := getRandomElements(arr, number)
+				questions = append(questions, resp...)
+				continue
+			} else {
+				c.JSON(http.StatusOK, arr)
+				continue
+			}
+		} else if category.Name == "" {
+			arr := getByDifficulty(db, difficulty)
+			if number != 0  && len(arr)>number{
+				resp := getRandomElements(arr, number)
+				questions = append(questions, resp...)
+				continue
+			} else {
+				c.JSON(http.StatusOK, arr)
+				continue
+			}
+		} else {
+			arr := getByCategoryAndDifficulty(db, category.Name, difficulty)
+			if(arr==nil){
+				c.JSON(http.StatusOK, gin.H{"message": "Not found any questions"})
+				continue
+			}
+			if number != 0 && len(arr)>number {
+				resp := getRandomElements(arr, number)
+				questions = append(questions, resp...)
+				continue
+			} else {
+				questions = append(questions, arr...)
+				continue
+			}
+	
+		}
+	}
+	questions =  getRandomElements(questions, number) 
+
+	//db := connect()
+
+
+	id, _ := c.Get("id")
+	username, _ := c.Get("username")
+	email, _ := c.Get("email")
+	isAdmin, _ := c.Get("is_admin")
+
+	// Respond with the user and the questions as JSON
+	c.JSON(http.StatusOK, gin.H{
+		"id":     id,
+		"user":     username,
+		"email":    email,
+		"is_admin": isAdmin,
+		"questions": questions,
+	})
+
+}
+
 func getRandomElements(arr []Question, n int) []Question {
 	if n >= len(arr) {
 		return arr
@@ -330,6 +437,8 @@ func getRandomElements(arr []Question, n int) []Question {
 
 
 
+
+
 func main() {
 	db:=connect()
 
@@ -337,7 +446,7 @@ func main() {
     router.GET("/allquestions",verifyToken,AllQuestions)
 	router.POST("/questions",verifyToken,postQuestionsBy)
 	router.GET("/questions",verifyToken,getQuestionsBy)
-
+    router.GET("/quiz",verifyToken,getQuiz)
     router.Run("localhost:8080")
 	getAll(db)
 	getByDifficulty(db,"'' or 1=1")

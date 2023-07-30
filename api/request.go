@@ -49,6 +49,9 @@ func getAll(db *sql.DB)[]Question {
 
 
 }
+
+
+
 func getByDifficulty(db *sql.DB, diff string)[]Question {
     rows, err := db.Query(`SELECT * FROM tblQuestions WHERE difficulty = $1`,diff)
     CheckError(err)
