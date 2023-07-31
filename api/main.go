@@ -63,31 +63,20 @@ func verifyToken(c *gin.Context) {
 		return
 	}
 
-	// Extract the token from the "Authorization" header (Bearer token)
-	/*var tokenStr string
-	fmt.Sscanf(tokenString, "Bearer %s", &tokenStr)*/
-
 	// Parse the token and check if it's valid and not expired
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			c.JSON(401, gin.H{"message":"unexpected signing method"})
+			c.JSON(401, gin.H{"message": "unexpected signing method"})
 			c.Abort()
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return MySigningKey, nil
 	})
-
-	if err != nil {
-		c.JSON(401, gin.H{"message": "Invalid or expired token2"})
-		c.Abort()
-		return
-	}
 	if err != nil || !token.Valid {
 		c.JSON(401, gin.H{"message": "Invalid or expired token"})
 		c.Abort()
 		return
 	}
-
 
 	// Access the user information from the token's claims
 	claims, ok := token.Claims.(jwt.MapClaims)
@@ -97,11 +86,19 @@ func verifyToken(c *gin.Context) {
 		return
 	}
 
+	// Convert the "id" claim to an int
+	id, ok := claims["id"].(float64)
+	if !ok {
+		c.JSON(401, gin.H{"message": "Invalid ID in token"})
+		c.Abort()
+		return
+	}
+
 	// Add the user information to the Gin context
+	c.Set("id", int(id))
 	c.Set("username", claims["username"].(string))
 	c.Set("email", claims["email"].(string))
 	c.Set("is_admin", claims["is_admin"].(bool))
-
 	c.Next()
 }
 
