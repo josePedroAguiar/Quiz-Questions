@@ -1,6 +1,6 @@
 # Technical Questions and Quizzes
 
-This project was made with the proposal to learn some basics of **GO Language** (Golang)  and to implement the application backend based on the idea of microservices.
+This project was made with the proposal to learn some basics of **GO Language** (Golang)
 ___
 ## API REQUESTs: 
 ### https://www.postman.com/gold-comet-956619/workspace/quizzes-questions
@@ -49,7 +49,7 @@ To do?
     - Get the result of responses.
     - Develop/Configure the Orchestrator using Kubernetes(k8s) or other technology 
         - Develop API Gateway
-        - Develop Message Broker (mainly because of quiz and api interaction)
+        - (Probably) Develop Message Broker (mainly because of quiz and api interaction)
     - FrontEnd
     - Generate and Save the results and analytics of the responses to the quizzes for each user.
 
