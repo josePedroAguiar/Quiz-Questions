@@ -1,6 +1,6 @@
 # Technical Questions and Quizzes
 
-This project was made with the proposal to learn some basics of **GO Language** (Golang)
+This project was made with the proposal to learn some basics of **GO Language** (Go)
 ___
 ## API REQUESTs: 
 ### https://www.postman.com/gold-comet-956619/workspace/quizzes-questions
