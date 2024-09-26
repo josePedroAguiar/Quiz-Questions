@@ -23,13 +23,13 @@ Now I will explain some decisions I made in the implementation of the idea and w
 ## Why? Are they really the best choice?
 
 - Why Gin?
-    -  swd
+    -  |
 
 - Why does (almost) every service have a single independent database?
-    - swd
+    - |
 
-- Why SQL and not nSQL?
-    - swd
+- Why SQL and not noSQL?
+    - |
 
 **NOTE:** They are more choices can be explain, although the previous one, in my opinion, are the most relevant 
 
